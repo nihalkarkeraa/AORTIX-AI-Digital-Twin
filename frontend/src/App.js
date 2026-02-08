@@ -15,29 +15,24 @@ export default function App() {
   return (
     <BrowserRouter>
       <Routes>
-        {/* ENTRY FLOW */}
+
+        {/* ENTRY */}
         <Route path="/" element={<Splash />} />
         <Route path="/upload" element={<Upload />} />
         <Route path="/processing" element={<Processing />} />
 
-        {/* AI AGENT FLOW */}
+        {/* AGENTS */}
         <Route path="/agent1" element={<Agent1Prediction />} />
         <Route path="/agent2" element={<Agent2Treatment />} />
         <Route path="/agent3" element={<Agent3Risk />} />
         <Route path="/agent4" element={<Agent4Decision />} />
 
-        {/* FINAL OUTPUT */}
+        {/* FINAL */}
         <Route path="/final" element={<FinalReport />} />
 
-        {/* FALLBACK (optional but recommended) */}
-        <Route
-          path="*"
-          element={
-            <div style={{ color: "white", padding: "40px" }}>
-              <h2>404 — Page Not Found</h2>
-            </div>
-          }
-        />
+        {/* FALLBACK */}
+        <Route path="*" element={<h2>404</h2>} />
+
       </Routes>
     </BrowserRouter>
   );

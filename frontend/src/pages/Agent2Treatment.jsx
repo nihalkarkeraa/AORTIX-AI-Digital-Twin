@@ -2,81 +2,51 @@ import { useNavigate } from "react-router-dom";
 import "./Agent.css";
 
 export default function Agent2Treatment() {
+
   const navigate = useNavigate();
 
-  const raw = sessionStorage.getItem("aortix_result");
-  const data = raw ? JSON.parse(raw) : null;
+  const stored = sessionStorage.getItem("aortix_result");
+  const data = stored ? JSON.parse(stored) : null;
 
-  // SAFETY GUARD
   if (!data || !data.agent2) {
     return (
       <div className="agent-container">
-        <h2>No Agent 2 data available</h2>
-
-        <div className="agent-controls">
-          <button
-            className="agent-btn secondary"
-            onClick={() => navigate("/agent1")}
-          >
-            ← Back to Agent 1
-          </button>
-        </div>
+        <h2>No Agent-2 data available</h2>
+        <button className="agent-btn" onClick={() => navigate("/agent1")}>
+          ← Back
+        </button>
       </div>
     );
   }
 
-  const agent2Output = data.agent2;
+  const { best, worst } = data.agent2;
 
   return (
     <div className="agent-container">
+
       {/* HEADER */}
       <div className="agent-header">
-        <h2>Agent 2 : Treatment Simulation Phase</h2>
+        <h2>Agent 2 : Treatment Simulation</h2>
         <span>AORTIX — Cardiovascular Digital Twin</span>
       </div>
 
       {/* CONTENT */}
       <div className="agent-content">
-        {/* LEFT — SIMULATION VISUAL PLACEHOLDER */}
+
+        {/* LEFT — WORST */}
         <div className="agent-left">
-          <div
-            style={{
-              width: "280px",
-              height: "280px",
-              borderRadius: "16px",
-              border: "2px dashed rgba(255,255,255,0.6)",
-              display: "flex",
-              alignItems: "center",
-              justifyContent: "center",
-              fontSize: "1.1rem",
-              opacity: 0.85,
-              textAlign: "center"
-            }}
-          >
-            Treatment<br />Simulation
-          </div>
+          <h3>Worst Medication</h3>
+          <p>{worst.treatment}</p>
+          <p>Score: {worst.risk_reduction}</p>
         </div>
 
-        {/* RIGHT — TREATMENT OUTPUT */}
+        {/* RIGHT — BEST */}
         <div className="agent-right">
-          <h3>Part-wise Treatment Plan</h3>
-
-          {Object.entries(agent2Output).map(([part, treatments]) => (
-            <div key={part} style={{ marginBottom: "15px" }}>
-              <b style={{ textTransform: "capitalize" }}>
-                {part.replaceAll("_", " ")}
-              </b>
-
-              <ul style={{ marginTop: "6px" }}>
-                {treatments.map((t, idx) => (
-                  <li key={idx}>
-                    {t.treatment} — <b>{t.confidence}</b>
-                  </li>
-                ))}
-              </ul>
-            </div>
-          ))}
+          <h3>Best Medication</h3>
+          <p>{best.treatment}</p>
+          <p>Score: {best.risk_reduction}</p>
         </div>
+
       </div>
 
       {/* CONTROLS */}
@@ -95,6 +65,7 @@ export default function Agent2Treatment() {
           Next →
         </button>
       </div>
+
     </div>
   );
 }

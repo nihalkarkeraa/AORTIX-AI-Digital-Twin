@@ -1,49 +1,67 @@
+import torch
+import torch.nn as nn
+import numpy as np
 import joblib
-import pandas as pd
 
-class Agent2TreatmentSimulator:
+TREATMENTS = ["ACE", "BETA", "ARB"]
+
+# ---------------- MLP MODEL ----------------
+class Agent2MLP(nn.Module):
     def __init__(self):
-        self.model = joblib.load("models/agent2_treatment_model.pkl")
+        super().__init__()
+        self.net = nn.Sequential(
+            nn.Linear(6,64),
+            nn.ReLU(),
+            nn.Linear(64,32),
+            nn.ReLU(),
+            nn.Linear(32,1)
+        )
 
-        self.part_treatments = {
-            "aorta": ["ACE_INHIBITOR", "ARB", "STATIN"],
-            "left_ventricle": ["BETA_BLOCKER", "ACE_INHIBITOR", "AFTERLOAD_REDUCTION"],
-            "right_ventricle": ["DIURETIC", "OXYGEN_THERAPY"],
-            "pulmonary_artery": ["PULMONARY_VASODILATOR", "OXYGEN_THERAPY"],
-            "pulmonary_veins": ["DIURETIC", "FLUID_RESTRICTION"],
-            "mitral_valve": ["DIURETIC", "RATE_CONTROL"],
-            "tricuspid_valve": ["DIURETIC", "VOLUME_MANAGEMENT"],
-            "inferior_vena_cava": ["VOLUME_MANAGEMENT", "DIURETIC"]
+    def forward(self,x):
+        return self.net(x)
+
+# ---------------- AGENT 2 ----------------
+class Agent2TreatmentSimulator:
+
+    def __init__(self):
+        self.model = Agent2MLP()
+        torch.load("models/agent2_mlp.pt", map_location="cpu")
+
+        self.model.eval()
+
+        # same scaler + label encoder you used during training
+        self.scaler = joblib.load("models/agent2_scaler.save")
+        self.encoder = joblib.load("models/agent2_encoder.save")
+
+
+    def simulate(self, vitals):
+        """
+        vitals = [HR, BP, SPO2, ECG, PP]
+        """
+
+        results = []
+
+        for t in TREATMENTS:
+            code = self.encoder.transform([t])[0]
+
+            row = vitals + [code]
+            row = self.scaler.transform([row])
+
+            x = torch.tensor(row, dtype=torch.float32)
+
+            with torch.no_grad():
+                score = float(self.model(x).item())
+
+            results.append({
+                "treatment": t,
+                "risk_reduction": round(score, 3)
+            })
+
+        # sort by risk reduction
+        results = sorted(results, key=lambda x: x["risk_reduction"], reverse=True)
+
+        return {
+            "best": results[0],
+            "worst": results[-1],
+            "all": results
         }
-
-    import pandas as pd
-
-def _predict(self, risk, csv_row, treatment):
-    X = pd.DataFrame([{
-        "risk_score": risk,
-        "systolic_bp": csv_row["systolic_bp"],
-        "heart_rate": csv_row["heart_rate"],
-        "spo2": csv_row["spo2"],
-        "ecg_risk": csv_row["ecg_risk"],
-        "treatment": treatment
-    }])
-
-    prob = self.model.predict_proba(X)[0][1]
-    return round(prob * 100, 1)
-
-
-    def simulate(self, agent1_output, csv_row):
-        results = {}
-
-        for part, text in agent1_output.items():
-            risk = float(text.split(":")[-1])
-            results[part] = []
-
-            for treatment in self.part_treatments[part]:
-                confidence = self._predict(risk, csv_row, treatment)
-                results[part].append({
-                    "treatment": treatment.replace("_", " "),
-                    "confidence": f"{confidence}%"
-                })
-
-        return results
