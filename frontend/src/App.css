@@ -1,38 +1,86 @@
+/* ==========================================
+   GLOBAL RESET
+========================================== */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+/* ==========================================
+   ROOT APP WRAPPER
+========================================== */
 .App {
-  text-align: center;
-}
-
-.App-logo {
-  height: 40vmin;
-  pointer-events: none;
-}
-
-@media (prefers-reduced-motion: no-preference) {
-  .App-logo {
-    animation: App-logo-spin infinite 20s linear;
-  }
-}
-
-.App-header {
-  background-color: #282c34;
   min-height: 100vh;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  font-size: calc(10px + 2vmin);
+  background: linear-gradient(135deg, #0f2027, #1c3a47, #142b36);
+  font-family: "Segoe UI", sans-serif;
   color: white;
+  overflow-x: hidden;
 }
 
-.App-link {
-  color: #61dafb;
+/* ==========================================
+   SMOOTH PAGE TRANSITION
+========================================== */
+.page-fade {
+  animation: fadeInPage 0.5s ease-in-out;
 }
 
-@keyframes App-logo-spin {
+@keyframes fadeInPage {
   from {
-    transform: rotate(0deg);
+    opacity: 0;
+    transform: translateY(12px);
   }
   to {
-    transform: rotate(360deg);
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* ==========================================
+   LINKS
+========================================== */
+a {
+  text-decoration: none;
+  color: #00c6ff;
+  transition: 0.3s ease;
+}
+
+a:hover {
+  color: #ffffff;
+}
+
+/* ==========================================
+   BUTTON DEFAULT STYLE
+========================================== */
+button {
+  font-family: inherit;
+}
+
+/* ==========================================
+   SCROLLBAR STYLING
+========================================== */
+::-webkit-scrollbar {
+  width: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: #142b36;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #00c6ff;
+  border-radius: 10px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #009ad6;
+}
+
+/* ==========================================
+   RESPONSIVE BASE
+========================================== */
+@media (max-width: 768px) {
+  .App {
+    font-size: 14px;
   }
 }

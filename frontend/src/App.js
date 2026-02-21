@@ -16,21 +16,17 @@ export default function App() {
     <BrowserRouter>
       <Routes>
 
-        {/* ENTRY */}
         <Route path="/" element={<Splash />} />
         <Route path="/upload" element={<Upload />} />
         <Route path="/processing" element={<Processing />} />
 
-        {/* AGENTS */}
         <Route path="/agent1" element={<Agent1Prediction />} />
         <Route path="/agent2" element={<Agent2Treatment />} />
         <Route path="/agent3" element={<Agent3Risk />} />
         <Route path="/agent4" element={<Agent4Decision />} />
 
-        {/* FINAL */}
         <Route path="/final" element={<FinalReport />} />
 
-        {/* FALLBACK */}
         <Route path="*" element={<h2>404</h2>} />
 
       </Routes>

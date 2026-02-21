@@ -27,4 +27,6 @@ export default function Splash() {
       </div>
     </div>
   );
+  
+
 }
