@@ -8,24 +8,40 @@
 }
 
 /* ==========================================
-   HTML + BODY
+   ROOT + HTML
 ========================================== */
 html, body {
   height: 100%;
   scroll-behavior: smooth;
 }
 
+/* ==========================================
+   BODY (ULTRA BACKGROUND)
+========================================== */
 body {
-  font-family: "Segoe UI", -apple-system, BlinkMacSystemFont, 
-    "Roboto", "Oxygen", "Ubuntu", "Cantarell", 
-    "Fira Sans", "Droid Sans", "Helvetica Neue", 
+  font-family: "Segoe UI", -apple-system, BlinkMacSystemFont,
+    "Roboto", "Oxygen", "Ubuntu", "Cantarell",
+    "Fira Sans", "Droid Sans", "Helvetica Neue",
     sans-serif;
 
-  background-color: #0f2027;
   color: #ffffff;
+
+  /* 🔥 Animated Gradient Background */
+  background: linear-gradient(-45deg, #02080f, #071a29, #0f2a3d, #02131f);
+  background-size: 400% 400%;
+  animation: gradientBG 12s ease infinite;
 
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+
+  overflow-x: hidden;
+}
+
+/* Gradient Animation */
+@keyframes gradientBG {
+  0% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+  100% { background-position: 0% 50%; }
 }
 
 /* ==========================================
@@ -38,28 +54,105 @@ body {
 }
 
 /* ==========================================
+   GLOBAL TEXT STYLES
+========================================== */
+h1, h2, h3, h4 {
+  font-weight: 600;
+  letter-spacing: 0.5px;
+}
+
+p {
+  opacity: 0.9;
+  line-height: 1.6;
+}
+
+/* ==========================================
    LINKS
 ========================================== */
 a {
   text-decoration: none;
-  color: inherit;
+  color: #00c6ff;
+  transition: 0.3s ease;
+}
+
+a:hover {
+  color: #ffffff;
 }
 
 /* ==========================================
-   BUTTON RESET
+   BUTTON GLOBAL STYLE
 ========================================== */
 button {
   font-family: inherit;
   border: none;
   outline: none;
+  cursor: pointer;
 }
 
 /* ==========================================
-   INPUT RESET
+   INPUT / FORM
 ========================================== */
 input, textarea {
   font-family: inherit;
   outline: none;
+  border: none;
+}
+
+/* ==========================================
+   GLASS EFFECT (Reusable Class)
+========================================== */
+.glass {
+  background: rgba(255, 255, 255, 0.05);
+  backdrop-filter: blur(20px);
+  border: 1px solid rgba(255,255,255,0.12);
+  border-radius: 20px;
+  box-shadow:
+    0 0 20px rgba(0,200,255,0.15),
+    0 10px 40px rgba(0,0,0,0.6);
+}
+
+/* ==========================================
+   GLOW TEXT (Reusable)
+========================================== */
+.glow-text {
+  background: linear-gradient(90deg, #00c6ff, #64e0ff);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+
+  text-shadow: 0 0 15px rgba(0,200,255,0.6);
+}
+
+/* ==========================================
+   NEON BUTTON (Reusable)
+========================================== */
+.neon-btn {
+  padding: 12px 28px;
+  border-radius: 12px;
+  font-weight: 600;
+
+  background: linear-gradient(135deg, #00c6ff, #0072ff);
+  color: white;
+
+  box-shadow: 0 0 20px rgba(0,200,255,0.5);
+
+  transition: 0.3s ease;
+}
+
+.neon-btn:hover {
+  transform: translateY(-3px) scale(1.05);
+  box-shadow: 0 0 40px rgba(0,200,255,1);
+}
+
+/* ==========================================
+   CARD HOVER EFFECT
+========================================== */
+.card-hover {
+  transition: 0.3s ease;
+}
+
+.card-hover:hover {
+  transform: translateY(-8px) scale(1.02);
+  box-shadow: 0 0 30px rgba(0,200,255,0.4);
 }
 
 /* ==========================================
@@ -68,12 +161,12 @@ input, textarea {
 code {
   font-family: Consolas, Monaco, "Courier New", monospace;
   background-color: rgba(255,255,255,0.08);
-  padding: 2px 6px;
+  padding: 3px 6px;
   border-radius: 6px;
 }
 
 /* ==========================================
-   SCROLLBAR (Modern Browsers)
+   SCROLLBAR (MODERN UI)
 ========================================== */
 ::-webkit-scrollbar {
   width: 8px;
@@ -84,10 +177,37 @@ code {
 }
 
 ::-webkit-scrollbar-thumb {
-  background: #00c6ff;
-  border-radius: 8px;
+  background: linear-gradient(#00c6ff, #0072ff);
+  border-radius: 10px;
 }
 
 ::-webkit-scrollbar-thumb:hover {
-  background: #009ad6;
+  background: #00e6ff;
+}
+
+/* ==========================================
+   PAGE TRANSITION
+========================================== */
+.page-fade {
+  animation: fadeInPage 0.5s ease-in-out;
+}
+
+@keyframes fadeInPage {
+  from {
+    opacity: 0;
+    transform: translateY(15px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* ==========================================
+   RESPONSIVE BASE
+========================================== */
+@media (max-width: 768px) {
+  body {
+    font-size: 14px;
+  }
 }

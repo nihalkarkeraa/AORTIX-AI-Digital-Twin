@@ -93,9 +93,9 @@ async def run_aortix(file: UploadFile = File(...)):
     )
 
     return {
-        "agent1": agent1_output,
-        "agent2": agent2_output,
-        "agent3": agent3_output,
-        "agent4": agent4_output,
-        "gen_ai_report": gen_ai_report
-    }
+    "agent1": agent1_output,
+    "agent2": agent2_output,
+    "agent3": agent3_output,
+    "agent4": agent4_output,
+    "summary": gen_ai_report   # <-- IMPORTANT
+}

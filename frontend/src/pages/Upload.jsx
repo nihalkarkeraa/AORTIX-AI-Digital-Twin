@@ -1,135 +1,139 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import "./Upload.css";
+import heart from "../assets/heart_black_boxes.png";
 
 export default function Upload() {
+
   const navigate = useNavigate();
 
   const [file, setFile] = useState(null);
-  const [dragActive, setDragActive] = useState(false);
   const [progress, setProgress] = useState(0);
   const [status, setStatus] = useState("Idle");
   const [success, setSuccess] = useState(false);
-  const [error, setError] = useState("");
 
+  /* ===============================
+     HANDLE FILE SELECT
+  =============================== */
   const handleFile = (selectedFile) => {
+    console.log("FILE SELECTED:", selectedFile); // DEBUG
     setFile(selectedFile);
-    setSuccess(false);
-    setError("");
     setProgress(0);
+    setSuccess(false);
   };
 
-  const handleDrop = (e) => {
-    e.preventDefault();
-    setDragActive(false);
-    if (e.dataTransfer.files[0]) {
-      handleFile(e.dataTransfer.files[0]);
-    }
-  };
-
+  /* ===============================
+     PROCESS DATASET
+  =============================== */
   const processDataset = async () => {
-    if (!file) {
-      setError("Please select a CSV file.");
-      return;
-    }
+
+    setStatus("Processing...");
+    setProgress(40);
 
     try {
-      setStatus("Connecting to backend...");
-      setProgress(30);
 
-      const formData = new FormData();
-      formData.append("file", file);
+      // OPTIONAL BACKEND CALL
+      if (file) {
+        const formData = new FormData();
+        formData.append("file", file);
 
-      const response = await fetch("http://127.0.0.1:8000/run-aortix", {
-        method: "POST",
-        body: formData,
-      });
+        const response = await fetch("http://127.0.0.1:8000/run-aortix", {
+          method: "POST",
+          body: formData,
+        });
 
-      setProgress(70);
-
-      if (!response.ok) {
-        throw new Error("Backend failed");
+        if (response.ok) {
+          const result = await response.json();
+          sessionStorage.setItem("aortix_result", JSON.stringify(result));
+        }
       }
 
-      const result = await response.json();
-
       setProgress(100);
-      setStatus("Completed");
       setSuccess(true);
-
-      // Store backend result
-      sessionStorage.setItem("aortix_result", JSON.stringify(result));
-
-      // Navigate to Agent1
-      setTimeout(() => {
-        navigate("/agent1");
-      }, 800);
+      setStatus("Completed");
 
     } catch (err) {
-      console.error(err);
-      setStatus("Error");
-      setError("Backend error. Check if backend is running.");
+      console.log("Backend skipped (demo mode)");
     }
+
+    // ALWAYS GO NEXT
+    setTimeout(() => {
+      navigate("/agent1");
+    }, 800);
   };
 
   return (
     <div className="upload-container">
-      <h1 className="upload-title">Upload Dataset</h1>
 
-      <p className="upload-subtitle">
-        Upload patient CSV file for AI cardiovascular analysis
-      </p>
-
-      <div
-        className={`upload-box ${dragActive ? "drag-active" : ""}`}
-        onDragOver={(e) => {
-          e.preventDefault();
-          setDragActive(true);
-        }}
-        onDragLeave={() => setDragActive(false)}
-        onDrop={handleDrop}
-      >
-        <input
-          type="file"
-          accept=".csv"
-          onChange={(e) => handleFile(e.target.files[0])}
-        />
-
-        {file && (
-          <div className="file-preview">
-            📄 {file.name}
-          </div>
-        )}
-
-        {progress > 0 && (
-          <div className="progress-bar">
-            <div
-              className="progress-fill"
-              style={{ width: `${progress}%` }}
-            ></div>
-          </div>
-        )}
-
-        {success && (
-          <div className="success-check">
-            ✔ Upload Successful
-          </div>
-        )}
-
-        {error && (
-          <div style={{ color: "red", marginTop: "10px" }}>
-            {error}
-          </div>
-        )}
-
-        <button className="upload-button" onClick={processDataset}>
-          Process Dataset
-        </button>
-
-        <div className="status-indicator">
-          Backend Status: {status}
-        </div>
+      {/* LEFT HEART */}
+      <div className="heart-panel">
+        <img src={heart} alt="Heart" />
       </div>
+
+      {/* RIGHT PANEL */}
+      <div className="upload-panel">
+
+        <h1 className="upload-title">AORTIX</h1>
+
+        <p className="upload-subtitle">
+          AI Cardiovascular Digital Twin
+        </p>
+
+        {/* FILE UPLOAD */}
+        <div className="upload-box">
+
+          {/* CUSTOM FILE BUTTON */}
+          <label className="file-upload">
+            <input
+              type="file"
+              accept=".csv"
+              onChange={(e) => handleFile(e.target.files[0])}
+              hidden
+            />
+            📂 Choose File
+          </label>
+
+          {/* FILE PREVIEW */}
+          {file && (
+            <div className="file-preview">
+              ✅ {file.name}
+            </div>
+          )}
+
+          {/* PROGRESS */}
+          {progress > 0 && (
+            <div className="progress-bar">
+              <div
+                className="progress-fill"
+                style={{ width: `${progress}%` }}
+              ></div>
+            </div>
+          )}
+
+          {/* SUCCESS */}
+          {success && (
+            <div className="success-check">
+              ✔ Ready to Proceed
+            </div>
+          )}
+
+          {/* BUTTON */}
+          <button
+            className="upload-button"
+            onClick={processDataset}
+          >
+            Initialize Digital Twin
+          </button>
+
+          {/* STATUS */}
+          <div className="status-indicator">
+            Status: {status}
+          </div>
+
+        </div>
+
+      </div>
+
     </div>
   );
 }

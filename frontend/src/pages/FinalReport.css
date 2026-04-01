@@ -1,186 +1,245 @@
-/* ===========================
-   APPLE WHITE THEME
-=========================== */
-.final-container {
-  min-height: 100vh;
-  background: #f5f7fa;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  padding: 40px;
-  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+/* ===============================
+GLOBAL BACKGROUND (ANIMATED + DEPTH)
+=============================== */
+.final-container{
+  min-height:100vh;
+  display:flex;
+  justify-content:center;
+  align-items:center;
+  padding:40px;
+
+  background:
+    radial-gradient(circle at 20% 20%, rgba(0,200,255,0.15), transparent),
+    radial-gradient(circle at 80% 80%, rgba(0,100,255,0.15), transparent),
+    linear-gradient(135deg,#02080f,#071a29);
+
+  font-family:"Segoe UI",sans-serif;
+  color:white;
+
+  position:relative;
+  overflow:hidden;
 }
 
-.final-card {
-  background: white;
-  border-radius: 28px;
-  padding: 50px;
-  max-width: 1000px;
-  width: 100%;
-  box-shadow: 0 25px 70px rgba(0,0,0,0.08);
-  animation: fadeIn 1s ease-in-out;
+/* PARTICLES */
+.final-container::after{
+  content:"";
+  position:absolute;
+  width:200%;
+  height:200%;
+
+  background-image: radial-gradient(rgba(0,200,255,0.25) 1px, transparent 1px);
+  background-size: 70px 70px;
+
+  animation: particleMove 30s linear infinite;
+  opacity:0.12;
 }
 
-/* TITLE */
-.final-title {
-  font-size: 2.5rem;
-  font-weight: 700;
-  text-align: center;
-  margin-bottom: 40px;
-  color: #111;
+@keyframes particleMove{
+  from{transform:translateY(0)}
+  to{transform:translateY(-150px)}
 }
 
-/* ===========================
-   METRIC CARDS
-=========================== */
-.metrics-grid {
-  display: flex;
-  justify-content: space-between;
-  gap: 25px;
-  margin-bottom: 50px;
-  flex-wrap: wrap;
+/* ===============================
+MAIN CARD (GLASS + GLOW)
+=============================== */
+.final-card{
+  width:100%;
+  max-width:1000px;
+  padding:50px;
+
+  border-radius:24px;
+
+  background:rgba(255,255,255,0.05);
+  backdrop-filter:blur(22px);
+
+  border:1px solid rgba(255,255,255,0.12);
+
+  box-shadow:
+    0 0 40px rgba(0,200,255,0.25),
+    0 30px 80px rgba(0,0,0,0.8);
+
+  animation:fadeIn 1s ease;
 }
 
-.metric-card {
-  flex: 1;
-  min-width: 200px;
-  background: #ffffff;
-  border-radius: 18px;
-  padding: 25px;
-  box-shadow: 0 10px 30px rgba(0,0,0,0.06);
-  transition: 0.3s ease;
+/* ===============================
+TITLE
+=============================== */
+.final-title{
+  text-align:center;
+  font-size:2.7rem;
+  margin-bottom:45px;
+
+  background:linear-gradient(90deg,#00c6ff,#64e0ff);
+  -webkit-background-clip:text;
+  -webkit-text-fill-color:transparent;
+
+  text-shadow:0 0 30px rgba(0,200,255,0.9);
 }
 
-.metric-card:hover {
-  transform: translateY(-5px);
+/* ===============================
+METRICS GRID
+=============================== */
+.metrics-grid{
+  display:flex;
+  gap:25px;
+  flex-wrap:wrap;
+  justify-content:space-between;
+  margin-bottom:45px;
 }
 
-.metric-card h3 {
-  font-size: 0.95rem;
-  color: #666;
-  margin-bottom: 10px;
+.metric-card{
+  flex:1;
+  min-width:220px;
+
+  padding:25px;
+
+  border-radius:18px;
+
+  background:rgba(255,255,255,0.05);
+  backdrop-filter:blur(12px);
+
+  border:1px solid rgba(255,255,255,0.1);
+
+  transition:0.3s;
 }
 
-.metric-value {
-  font-size: 1.8rem;
-  font-weight: 700;
-  color: #111;
+.metric-card:hover{
+  transform:translateY(-8px) scale(1.03);
+  box-shadow:0 0 25px rgba(0,200,255,0.5);
 }
 
-.metric-value.high {
-  color: #e63946;
+.metric-card h3{
+  color:#aaa;
+  font-size:0.95rem;
 }
 
-/* ===========================
-   ECG WAVE ANIMATION
-=========================== */
-.ecg-container {
-  height: 80px;
-  margin-bottom: 40px;
-  overflow: hidden;
-  position: relative;
+.metric-value{
+  font-size:2rem;
+  font-weight:700;
+  margin-top:8px;
 }
 
-.ecg-line {
-  position: absolute;
-  width: 200%;
-  height: 2px;
-  background: linear-gradient(to right, transparent, #007aff, transparent);
-  animation: ecgMove 2s linear infinite;
+.metric-value.high{
+  color:#ff4d4d;
+  text-shadow:0 0 10px rgba(255,77,77,0.7);
 }
 
-@keyframes ecgMove {
-  0% { left: -100%; }
-  100% { left: 100%; }
+/* ===============================
+ECG LINE (UPGRADED)
+=============================== */
+.ecg-container{
+  height:80px;
+  margin:35px 0;
+  overflow:hidden;
+  position:relative;
 }
 
-/* ===========================
-   CHAT BUBBLE
-=========================== */
-.chat-wrapper {
-  margin-bottom: 40px;
+.ecg-line{
+  position:absolute;
+  width:200%;
+  height:2px;
+
+  background:linear-gradient(to right, transparent,#00c6ff,transparent);
+
+  animation:ecgMove 2s linear infinite;
 }
 
-.chat-bubble {
-  background: #f1f3f6;
-  padding: 28px;
-  border-radius: 18px;
-  line-height: 1.8;
-  font-size: 1.05rem;
-  color: #222;
-  position: relative;
+@keyframes ecgMove{
+  0%{left:-100%}
+  100%{left:100%}
 }
 
-/* Typing animation */
-.typing {
-  overflow: hidden;
-  border-right: 2px solid #007aff;
-  white-space: nowrap;
-  animation: typing 4s steps(40) 1 forwards,
-             blink 1s infinite;
+/* ===============================
+AI SUMMARY BOX
+=============================== */
+.chat-wrapper{
+  margin-top:30px;
 }
 
-@keyframes typing {
-  from { width: 0; }
-  to { width: 100%; }
+.chat-bubble{
+  padding:28px;
+
+  border-radius:18px;
+
+  background:rgba(0,200,255,0.1);
+
+  border:1px solid rgba(0,200,255,0.25);
+
+  line-height:1.8;
+
+  box-shadow:0 0 20px rgba(0,200,255,0.15);
+
+  transition:0.3s;
 }
 
-@keyframes blink {
-  0%,100% { border-color: transparent; }
-  50% { border-color: #007aff; }
+.chat-bubble:hover{
+  transform:scale(1.01);
 }
 
-/* ===========================
-   DOWNLOAD BUTTON
-=========================== */
-.download-section {
-  text-align: center;
+/* ===============================
+BUTTON
+=============================== */
+.download-section{
+  text-align:center;
+  margin-top:45px;
 }
 
-.download-btn {
-  background: #007aff;
-  color: white;
-  border: none;
-  padding: 14px 32px;
-  border-radius: 30px;
-  font-size: 1rem;
-  font-weight: 600;
-  cursor: pointer;
-  transition: 0.3s ease;
-  box-shadow: 0 10px 25px rgba(0,122,255,0.3);
+.download-btn{
+  padding:14px 32px;
+
+  border:none;
+  border-radius:14px;
+
+  background:linear-gradient(135deg,#00c6ff,#0072ff);
+
+  color:white;
+
+  font-weight:600;
+  font-size:1rem;
+
+  cursor:pointer;
+
+  transition:0.3s;
+
+  box-shadow:0 0 25px rgba(0,200,255,0.6);
 }
 
-.download-btn:hover {
-  background: #005ecb;
-  transform: translateY(-3px);
-  box-shadow: 0 15px 35px rgba(0,122,255,0.4);
+.download-btn:hover{
+  transform:translateY(-5px) scale(1.06);
+  box-shadow:
+    0 0 50px rgba(0,200,255,1),
+    0 0 80px rgba(0,200,255,0.6);
 }
 
-/* ===========================
-   RESPONSIVE
-=========================== */
-@media (max-width: 768px) {
-  .metrics-grid {
-    flex-direction: column;
+/* ===============================
+ANIMATION
+=============================== */
+@keyframes fadeIn{
+  from{
+    opacity:0;
+    transform:translateY(30px);
+  }
+  to{
+    opacity:1;
+    transform:translateY(0);
+  }
+}
+
+/* ===============================
+RESPONSIVE
+=============================== */
+@media(max-width:768px){
+
+  .metrics-grid{
+    flex-direction:column;
   }
 
-  .final-card {
-    padding: 30px;
+  .final-card{
+    padding:30px;
   }
 
-  .final-title {
-    font-size: 2rem;
+  .final-title{
+    font-size:2rem;
   }
 
-  .chat-bubble {
-    font-size: 0.95rem;
-  }
-}
-
-/* ===========================
-   FADE ANIMATION
-=========================== */
-@keyframes fadeIn {
-  from { opacity: 0; transform: translateY(20px); }
-  to { opacity: 1; transform: translateY(0); }
 }

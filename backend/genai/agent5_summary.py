@@ -38,4 +38,7 @@ Generate a simple clinical summary including:
             }
         )
 
-        return response.json()["response"]
+        result = response.json()
+        print("OLLAMA RESULT:", result)
+
+        return result.get("response", "AI summary unavailable")

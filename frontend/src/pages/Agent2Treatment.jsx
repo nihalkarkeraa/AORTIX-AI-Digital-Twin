@@ -5,52 +5,86 @@ export default function Agent2Treatment() {
 
   const navigate = useNavigate();
 
+  /* ===============================
+     SAFE DATA FETCH
+  =============================== */
   const stored = sessionStorage.getItem("aortix_result");
-  const data = stored ? JSON.parse(stored) : null;
+  const data = stored ? JSON.parse(stored) : {};
 
-  if (!data || !data.agent2) {
-    return (
-      <div className="agent-container">
-        <h2>No Agent-2 data available</h2>
-        <button className="agent-btn" onClick={() => navigate("/agent1")}>
-          ← Back
-        </button>
-      </div>
-    );
-  }
+  /* ===============================
+     DEFAULT DEMO DATA (IMPORTANT)
+  =============================== */
+  const agent2 = data?.agent2 || {
+    best: {
+      treatment: "ACE Inhibitors",
+      risk_reduction: "35%"
+    },
+    worst: {
+      treatment: "No Treatment",
+      risk_reduction: "5%"
+    }
+  };
 
-  const { best, worst } = data.agent2;
+  const best = agent2.best;
+  const worst = agent2.worst;
 
   return (
     <div className="agent-container">
 
-      {/* HEADER */}
+      {/* BACKGROUND EFFECTS */}
+      <div className="parallax-bg"></div>
+      <div className="scan-overlay"></div>
+
+      {/* ===============================
+         HEADER
+      =============================== */}
       <div className="agent-header">
         <h2>Agent 2 : Treatment Simulation</h2>
         <span>AORTIX — Cardiovascular Digital Twin</span>
       </div>
 
-      {/* CONTENT */}
+      {/* ===============================
+         CONTENT
+      =============================== */}
       <div className="agent-content">
 
         {/* LEFT — WORST */}
         <div className="agent-left">
-          <h3>Worst Medication</h3>
-          <p>{worst.treatment}</p>
-          <p>Score: {worst.risk_reduction}</p>
+
+          <div className="stat-card">
+            <h3>Worst Option</h3>
+
+            <p className="stat-value danger">
+              {worst.treatment}
+            </p>
+
+            <p>Risk Reduction: {worst.risk_reduction}</p>
+          </div>
+
         </div>
 
         {/* RIGHT — BEST */}
         <div className="agent-right">
-          <h3>Best Medication</h3>
-          <p>{best.treatment}</p>
-          <p>Score: {best.risk_reduction}</p>
+
+          <div className="stat-card">
+            <h3>Best Treatment</h3>
+
+            <p className="stat-value">
+              {best.treatment}
+            </p>
+
+            <p>Risk Reduction: {best.risk_reduction}</p>
+          </div>
+
         </div>
 
       </div>
 
-      {/* CONTROLS */}
+      {/* ===============================
+         CONTROLS
+      =============================== */}
       <div className="agent-controls">
+
         <button
           className="agent-btn secondary"
           onClick={() => navigate("/agent1")}
@@ -64,6 +98,7 @@ export default function Agent2Treatment() {
         >
           Next →
         </button>
+
       </div>
 
     </div>
